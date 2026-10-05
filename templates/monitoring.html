@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CloudShield | Live Monitoring</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #050b14;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            bottom: 0;
+            left: 0;
+
+            width: 245px;
+
+            padding: 25px 15px;
+
+            background: #08111e;
+
+            border-right: 1px solid #172638;
+        }
+
+        .brand {
+            padding: 0 10px;
+
+            margin-bottom: 40px;
+
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .brand span {
+            color: #00bfff;
+        }
+
+        .nav-title {
+            padding: 0 15px;
+
+            margin-bottom: 10px;
+
+            color: #506276;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+        }
+
+        .nav-item {
+            display: block;
+
+            padding: 13px 15px;
+
+            margin-bottom: 5px;
+
+            border-radius: 8px;
+
+            color: #8999aa;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 191, 255, 0.07);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(0, 191, 255, 0.11);
+            color: #00bfff;
+        }
+
+        .logout {
+            position: absolute;
+
+            left: 15px;
+            right: 15px;
+            bottom: 25px;
+
+            color: #ff7e88;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 245px;
+
+            padding: 35px;
+
+            width: calc(100% - 245px);
+        }
+
+        .topbar {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .topbar p {
+            margin-top: 7px;
+
+            color: #74869a;
+
+            font-size: 14px;
+        }
+
+        .live-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 15px;
+
+            border-radius: 20px;
+
+            background: rgba(50, 220, 160, 0.07);
+
+            border: 1px solid rgba(50, 220, 160, 0.16);
+
+            color: #45dca8;
+
+            font-size: 12px;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #45dca8;
+
+            box-shadow: 0 0 10px #45dca8;
+        }
+
+        /* ================= MONITOR HEADER ================= */
+
+        .monitor-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .event-count {
+            color: #718398;
+
+            font-size: 13px;
+        }
+
+        .event-count strong {
+            color: #00bfff;
+        }
+
+        .refresh-btn {
+            padding: 10px 16px;
+
+            border: 1px solid #1d344b;
+
+            border-radius: 8px;
+
+            background: #0b1624;
+
+            color: #b7c5d4;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .refresh-btn:hover {
+            border-color: #00bfff;
+            color: #00bfff;
+        }
+
+        /* ================= FILTERS ================= */
+
+        .filters {
+            display: grid;
+
+            grid-template-columns:
+                1fr 180px 180px;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+        .filter-input,
+        .filter-select {
+            width: 100%;
+
+            padding: 12px 14px;
+
+            background: #0b1624;
+
+            border: 1px solid #17283a;
+
+            border-radius: 8px;
+
+            color: #d7e0e9;
+
+            outline: none;
+        }
+
+        .filter-input:focus,
+        .filter-select:focus {
+            border-color: #00bfff;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-panel {
+            background: #0b1624;
+
+            border: 1px solid #17283a;
+
+            border-radius: 13px;
+
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            min-width: 1000px;
+
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 16px 18px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #142437;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+        th {
+            background: #0a1421;
+
+            color: #65788c;
+
+            font-size: 10px;
+
+            letter-spacing: 0.8px;
+
+            font-weight: 600;
+        }
+
+        td {
+            color: #c6d1dc;
+        }
+
+        tbody tr {
+            transition: 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(0, 191, 255, 0.035);
+        }
+
+        /* ================= SEVERITY ================= */
+
+        .badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.4px;
+        }
+
+        .critical {
+            color: #ff6172;
+            background: rgba(255, 70, 90, 0.09);
+        }
+
+        .high {
+            color: #ffac59;
+            background: rgba(255, 165, 70, 0.09);
+        }
+
+        .medium {
+            color: #ffd45c;
+            background: rgba(255, 205, 70, 0.08);
+        }
+
+        .low {
+            color: #4fe0af;
+            background: rgba(60, 220, 160, 0.08);
+        }
+
+        .info {
+            color: #66c9ff;
+            background: rgba(70, 190, 255, 0.08);
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            color: #8495a7;
+        }
+
+        .status.suspicious {
+            color: #ffad52;
+        }
+
+        .status.blocked {
+            color: #ff5d70;
+        }
+
+        .status.investigating {
+            color: #b18cff;
+        }
+
+        .status.resolved {
+            color: #4fe0af;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            padding: 60px 20px;
+
+            text-align: center;
+
+            color: #63758a;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            color: #9aa9b8;
+
+            font-size: 16px;
+
+            margin-bottom: 7px;
+        }
+
+        .empty p {
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                min-height: auto;
+            }
+
+            .logout {
+                position: static;
+
+                margin-top: 15px;
+            }
+
+            .main {
+                width: 100%;
+
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .monitor-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            🛡 Cloud<span>Shield</span>
+        </div>
+
+        <div class="nav-title">
+            SECURITY CONSOLE
+        </div>
+
+        <a
+            href="/dashboard"
+            class="nav-item"
+        >
+            ◈ Dashboard
+        </a>
+
+        <a
+            href="/live-monitoring"
+            class="nav-item active"
+        >
+            ◉ Live Monitoring
+        </a>
+
+        <a
+            href="/security-alerts"
+            class="nav-item"
+        >
+            ⚠ Security Alerts
+        </a>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            ◇ Threat Detection
+        </a>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            ◫ Incident Analysis
+        </a>
+
+        <a
+            href="#"
+            class="nav-item"
+        >
+            ◌ Audit Logs
+        </a>
+
+        <a
+            href="/logout"
+            class="nav-item logout"
+        >
+            ⇥ Logout
+        </a>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Live Monitoring
+                </h1>
+
+                <p>
+                    Monitor security events across the CloudShield environment.
+                </p>
+
+            </div>
+
+
+            <div class="live-status">
+
+                <span class="live-dot"></span>
+
+                MONITORING ACTIVE
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= MONITOR HEADER ================= -->
+
+        <div class="monitor-header">
+
+            <div class="event-count">
+
+                Showing
+                <strong id="visibleCount">
+                    {{ events|length }}
+                </strong>
+                security events
+
+            </div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="location.reload()"
+            >
+                ↻ Refresh Events
+            </button>
+
+        </div>
+
+
+        <!-- ================= FILTERS ================= -->
+
+        <div class="filters">
+
+            <input
+                id="searchInput"
+                class="filter-input"
+                type="text"
+                placeholder="Search event, IP, username, source..."
+                onkeyup="filterEvents()"
+            >
+
+
+            <select
+                id="severityFilter"
+                class="filter-select"
+                onchange="filterEvents()"
+            >
+
+                <option value="ALL">
+                    All Severities
+                </option>
+
+                <option value="CRITICAL">
+                    Critical
+                </option>
+
+                <option value="HIGH">
+                    High
+                </option>
+
+                <option value="MEDIUM">
+                    Medium
+                </option>
+
+                <option value="LOW">
+                    Low
+                </option>
+
+                <option value="INFO">
+                    Info
+                </option>
+
+            </select>
+
+
+            <select
+                id="statusFilter"
+                class="filter-select"
+                onchange="filterEvents()"
+            >
+
+                <option value="ALL">
+                    All Statuses
+                </option>
+
+                <option value="NORMAL">
+                    Normal
+                </option>
+
+                <option value="SUSPICIOUS">
+                    Suspicious
+                </option>
+
+                <option value="BLOCKED">
+                    Blocked
+                </option>
+
+                <option value="INVESTIGATING">
+                    Investigating
+                </option>
+
+                <option value="RESOLVED">
+                    Resolved
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ================= TABLE ================= -->
+
+        <section class="table-panel">
+
+            <div class="table-wrapper">
+
+                <table id="eventsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>TIME</th>
+
+                            <th>EVENT TYPE</th>
+
+                            <th>SOURCE</th>
+
+                            <th>IP ADDRESS</th>
+
+                            <th>USERNAME</th>
+
+                            <th>SEVERITY</th>
+
+                            <th>STATUS</th>
+
+                            <th>MESSAGE</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="eventsBody">
+
+                    {% for event in events %}
+
+                        <tr
+                            data-severity="{{ event['severity'] }}"
+                            data-status="{{ event['status'] }}"
+                        >
+
+                            <td>
+                                #{{ event["id"] }}
+                            </td>
+
+                            <td>
+                                {{ event["timestamp"][:19] }}
+                            </td>
+
+                            <td>
+                                {{ event["event_type"] }}
+                            </td>
+
+                            <td>
+                                {{ event["source"] or "-" }}
+                            </td>
+
+                            <td>
+                                {{ event["ip_address"] or "-" }}
+                            </td>
+
+                            <td>
+                                {{ event["username"] or "-" }}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="badge
+                                    {% if event['severity'] == 'CRITICAL' %}
+                                        critical
+                                    {% elif event['severity'] == 'HIGH' %}
+                                        high
+                                    {% elif event['severity'] == 'MEDIUM' %}
+                                        medium
+                                    {% elif event['severity'] == 'LOW' %}
+                                        low
+                                    {% else %}
+                                        info
+                                    {% endif %}
+                                    "
+                                >
+
+                                    {{ event["severity"] }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="status
+                                    {{ event['status']|lower }}"
+                                >
+
+                                    {{ event["status"] }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+                                {{ event["message"] or "-" }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+                {% if not events %}
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            ◉
+                        </div>
+
+                        <h3>
+                            No Security Events
+                        </h3>
+
+                        <p>
+                            CloudShield has not received any security
+                            events yet.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+function filterEvents() {
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const severity =
+        document
+        .getElementById("severityFilter")
+        .value;
+
+    const status =
+        document
+        .getElementById("statusFilter")
+        .value;
+
+    const rows =
+        document
+        .querySelectorAll("#eventsBody tr");
+
+    let visible = 0;
+
+
+    rows.forEach(function(row) {
+
+        const text =
+            row.textContent.toLowerCase();
+
+        const rowSeverity =
+            row.dataset.severity;
+
+        const rowStatus =
+            row.dataset.status;
+
+
+        const matchesSearch =
+            text.includes(search);
+
+        const matchesSeverity =
+            severity === "ALL" ||
+            rowSeverity === severity;
+
+        const matchesStatus =
+            status === "ALL" ||
+            rowStatus === status;
+
+
+        if (
+            matchesSearch &&
+            matchesSeverity &&
+            matchesStatus
+        ) {
+
+            row.style.display = "";
+
+            visible++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+
+    document
+        .getElementById("visibleCount")
+        .textContent = visible;
+
+}
+
+</script>
+
+</body>
+
+</html>

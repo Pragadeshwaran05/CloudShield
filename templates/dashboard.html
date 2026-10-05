@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CloudShield | Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #050b14;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            background: #08111e;
+            border-right: 1px solid #172638;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding: 0 10px;
+        }
+
+        .brand span {
+            color: #00bfff;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            color: #8e9eb0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(0,191,255,.1);
+            color: #00bfff;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+            color: #ff8585;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #77899c;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            padding: 22px;
+            border-radius: 12px;
+            background: #0c1624;
+            border: 1px solid #17283a;
+        }
+
+        .card-title {
+            color: #7f90a4;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .blue {
+            color: #00bfff;
+        }
+
+        .red {
+            color: #ff5d6c;
+        }
+
+        .orange {
+            color: #ffb454;
+        }
+
+        .yellow {
+            color: #ffd45c;
+        }
+
+        /* TABLE */
+
+        .panel {
+            background: #0c1624;
+            border: 1px solid #17283a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid #17283a;
+        }
+
+        .panel-header h2 {
+            font-size: 17px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 15px 20px;
+            border-bottom: 1px solid #142436;
+            font-size: 13px;
+        }
+
+        th {
+            color: #72849a;
+            font-weight: 500;
+        }
+
+        td {
+            color: #cbd5df;
+        }
+
+        .severity {
+            font-weight: 600;
+        }
+
+        .critical {
+            color: #ff4d61;
+        }
+
+        .high {
+            color: #ff9d45;
+        }
+
+        .medium {
+            color: #ffd15c;
+        }
+
+        .normal {
+            color: #45dfaa;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+                width: calc(100% - 210px);
+                padding: 25px;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: static;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .logout {
+                position: static;
+                display: block;
+                margin-top: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            🛡 Cloud<span>Shield</span>
+        </div>
+
+        <a href="/dashboard"
+           class="nav-item active">
+            Dashboard
+        </a>
+
+        <a href="/live-monitoring"
+           class="nav-item">
+            Live Monitoring
+        </a>
+
+        <a href="/security-alerts"
+           class="nav-item">
+            Security Alerts
+        </a>
+
+        <a href="#"
+           class="nav-item">
+            Threat Detection
+        </a>
+
+        <a href="#"
+           class="nav-item">
+            Incident Analysis
+        </a>
+
+        <a href="#"
+           class="nav-item">
+            Audit Logs
+        </a>
+
+        <a href="/logout"
+           class="nav-item logout">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+        <div class="header">
+
+            <h1>
+                Security Dashboard
+            </h1>
+
+            <p>
+                Welcome back, {{ session["username"] }}.
+                Monitor your cloud security environment.
+            </p>
+
+        </div>
+
+
+        <section class="cards">
+
+            <div class="card">
+
+                <div class="card-title">
+                    TOTAL EVENTS
+                </div>
+
+                <div class="card-value blue">
+                    {{ total_events or 0 }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    CRITICAL ALERTS
+                </div>
+
+                <div class="card-value red">
+                    {{ critical_alerts or 0 }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    HIGH RISK EVENTS
+                </div>
+
+                <div class="card-value orange">
+                    {{ high_risk or 0 }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    SUSPICIOUS EVENTS
+                </div>
+
+                <div class="card-value yellow">
+                    {{ suspicious_events or 0 }}
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    Recent Security Events
+                </h2>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>IP Address</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for event in recent_events %}
+
+                        <tr>
+
+                            <td>
+                                {{ event["timestamp"] }}
+                            </td>
+
+                            <td>
+                                {{ event["event_type"] }}
+                            </td>
+
+                            <td>
+                                {{ event["ip_address"] }}
+                            </td>
+
+                            <td class="severity
+                                {% if event['severity'] == 'CRITICAL' %}
+                                    critical
+                                {% elif event['severity'] == 'HIGH' %}
+                                    high
+                                {% elif event['severity'] == 'MEDIUM' %}
+                                    medium
+                                {% else %}
+                                    normal
+                                {% endif %}
+                            ">
+
+                                {{ event["severity"] }}
+
+                            </td>
+
+                            <td>
+                                {{ event["status"] }}
+                            </td>
+
+                        </tr>
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="5">
+                                No security events recorded yet.
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

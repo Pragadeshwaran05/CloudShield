@@ -1,0 +1,685 @@
+    ```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CloudShield | Cyber Security Monitoring</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050b14;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 174, 255, 0.08);
+            filter: blur(100px);
+            border-radius: 50%;
+            top: -180px;
+            left: -150px;
+            z-index: -1;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: rgba(76, 0, 255, 0.08);
+            filter: blur(100px);
+            border-radius: 50%;
+            bottom: -180px;
+            right: -120px;
+            z-index: -1;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            width: 100%;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(5, 11, 20, 0.75);
+            backdrop-filter: blur(15px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .shield {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00bfff, #246bff);
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.25);
+            font-size: 19px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #aeb9c8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .login-btn {
+            text-decoration: none;
+            color: #ffffff;
+            border: 1px solid rgba(0, 191, 255, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #00aeea;
+            border-color: #00aeea;
+            box-shadow: 0 0 20px rgba(0, 174, 234, 0.3);
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: calc(100vh - 75px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            padding: 70px 7%;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 30px;
+            background: rgba(0, 200, 150, 0.08);
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            color: #49e6b4;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #32d99b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #32d99b;
+        }
+
+        h1 {
+            font-size: clamp(42px, 6vw, 76px);
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        h1 span {
+            color: #19bfff;
+        }
+
+        .hero-description {
+            color: #9ba9ba;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 590px;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 14px 24px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #00bfff, #246bff);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 157, 255, 0.2);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 157, 255, 0.35);
+        }
+
+        .secondary-btn {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #dce5ef;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        /* SECURITY PANEL */
+
+        .security-panel {
+            width: 450px;
+            min-height: 390px;
+            border-radius: 18px;
+            padding: 25px;
+            background: rgba(12, 22, 36, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(20px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .live {
+            color: #45e3a9;
+            font-size: 12px;
+        }
+
+        .security-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 145px;
+            height: 145px;
+            border-radius: 50%;
+            border: 10px solid rgba(0, 191, 255, 0.1);
+            border-top-color: #00bfff;
+            border-right-color: #246bff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-35deg);
+        }
+
+        .score-content {
+            position: absolute;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 35px;
+            font-weight: 700;
+        }
+
+        .score-label {
+            font-size: 11px;
+            color: #8190a2;
+            margin-top: 3px;
+        }
+
+        .security-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            color: #7e8c9d;
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .safe {
+            color: #45e3a9;
+        }
+
+        .warning {
+            color: #ffbd59;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 80px 7%;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: #8190a2;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            padding: 28px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 191, 255, 0.3);
+            background: rgba(0, 191, 255, 0.035);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(0, 191, 255, 0.1);
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #8492a4;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 30px 7%;
+            color: #667487;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 950px) {
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .security-panel {
+                width: 100%;
+                max-width: 600px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-links a:not(.login-btn) {
+                display: none;
+            }
+
+            .hero {
+                padding: 55px 5%;
+            }
+
+            h1 {
+                font-size: 44px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .security-panel {
+                padding: 20px;
+            }
+
+            .features {
+                padding: 60px 5%;
+            }
+
+            .section-title h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+            <div class="shield">🛡</div>
+            <span>CloudShield</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#security">Security</a>
+            <a href="{{ url_for('login') }}" class="login-btn">
+                Login
+            </a>
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <main class="hero">
+
+        <section class="hero-content">
+
+            <div class="status">
+                <span class="status-dot"></span>
+                Security Monitoring Active
+            </div>
+
+            <h1>
+                Protect Your
+                <span>Cloud.</span>
+                Detect Every Threat.
+            </h1>
+
+            <p class="hero-description">
+                CloudShield is a cloud security monitoring platform
+                designed to continuously analyze security events,
+                detect suspicious activity, and help security teams
+                respond to potential threats.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{{ url_for('login') }}" class="primary-btn">
+                    Open Security Console →
+                </a>
+
+                <a href="#features" class="secondary-btn">
+                    Explore Features
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- SECURITY PREVIEW -->
+
+        <section class="security-panel" id="security">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    Security Overview
+                </div>
+
+                <div class="live">
+                    ● LIVE
+                </div>
+
+            </div>
+
+
+            <div class="security-score">
+
+                <div class="score-circle"></div>
+
+                <div class="score-content">
+
+                    <div class="score">
+                        94
+                    </div>
+
+                    <div class="score-label">
+                        SECURITY SCORE
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-stats">
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        SYSTEM STATUS
+                    </div>
+
+                    <div class="stat-value safe">
+                        Protected
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        THREATS
+                    </div>
+
+                    <div class="stat-value warning">
+                        03
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        EVENTS
+                    </div>
+
+                    <div class="stat-value">
+                        1,284
+                    </div>
+
+                </div>
+
+                <div class="stat">
+
+                    <div class="stat-label">
+                        MONITORING
+                    </div>
+
+                    <div class="stat-value safe">
+                        Active
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FEATURES -->
+
+    <section class="features" id="features">
+
+        <div class="section-title">
+
+            <h2>Security Intelligence</h2>
+
+            <p>
+                Monitor, detect and investigate suspicious activity
+                from a centralized security console.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    Live Monitoring
+                </h3>
+
+                <p>
+                    Collect and monitor security events from
+                    applications, systems and cloud services
+                    through a centralized monitoring interface.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⚠
+                </div>
+
+                <h3>
+                    Threat Detection
+                </h3>
+
+                <p>
+                    Identify suspicious behavior such as
+                    brute-force attempts, unusual logins and
+                    abnormal activity.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ◈
+                </div>
+
+                <h3>
+                    Security Intelligence
+                </h3>
+
+                <p>
+                    Analyze security events, assign risk scores
+                    and provide useful information for
+                    investigating potential incidents.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026 CloudShield —
+        Cloud Security Monitoring & Threat Detection System
+
+    </footer>
+
+</body>
+</html>
+```
